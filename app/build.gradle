@@ -35,4 +35,6 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 
     compile(name: 'LiteAVSDK_Professional_4.6.4218', ext: 'aar')
+
+    compile 'com.android.support:multidex:1.0.0'
 }

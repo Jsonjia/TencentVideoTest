@@ -10,7 +10,8 @@
         android:id="@+id/txcloutvideo"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_centerInParent="true" />
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
 
     <RelativeLayout
         android:id="@+id/toolbar"
@@ -25,12 +26,18 @@
             android:orientation="horizontal">
 
             <Button
+                android:id="@+id/btn_message_input"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/icon_message_png" />
+
+            <Button
                 android:id="@+id/btnFaceBeauty"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_marginBottom="5dp"
                 android:layout_marginLeft="20dp"
-                android:background="@drawable/beauty" />
+                android:background="@drawable/icon_beauty_png" />
 
             <Button
                 android:id="@+id/btnCameraChange"
@@ -39,16 +46,14 @@
                 android:layout_marginLeft="20dp"
                 android:background="@drawable/camera_change" />
 
+            <Button
+                android:id="@+id/btn_close"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginLeft="20dp"
+                android:background="@drawable/close" />
         </LinearLayout>
     </RelativeLayout>
-
-    <com.zjp.tencentvideo.widget.BeautySettingPannel
-        android:id="@+id/layoutFaceBeauty"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:clickable="true"
-        android:visibility="gone" />
 
     <FrameLayout
         android:layout_width="match_parent"

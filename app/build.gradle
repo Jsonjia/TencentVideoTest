@@ -23,6 +23,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
 }
 
 dependencies {
@@ -36,5 +37,7 @@ dependencies {
 
     compile(name: 'LiteAVSDK_Professional_4.6.4218', ext: 'aar')
 
-    compile 'com.android.support:multidex:1.0.0'
+    compile 'com.android.support:multidex:1.0.1'
+
+    implementation 'com.android.support:design:27.1.1'
 }

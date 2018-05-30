@@ -1,26 +1,27 @@
-package com.zjp.tencentvideo.widget;
+package com.zjp.tencentvideo.beautysettings;
 
 import android.content.Context;
 import android.database.DataSetObserver;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Adapter;
 
 
-public class TXHorizontalPickerView extends android.widget.HorizontalScrollView {
+public class TCHorizontalScrollView extends android.widget.HorizontalScrollView {
 
-    public TXHorizontalPickerView(Context context) {
+    public TCHorizontalScrollView(Context context) {
         super(context);
         initialize();
     }
 
-    public TXHorizontalPickerView(Context context, AttributeSet attrs) {
+    public TCHorizontalScrollView(Context context, AttributeSet attrs) {
         super(context, attrs);
         initialize();
     }
 
-    public TXHorizontalPickerView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public TCHorizontalScrollView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         initialize();
     }
@@ -65,12 +66,12 @@ public class TXHorizontalPickerView extends android.widget.HorizontalScrollView 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-//        int side = getWidth() / 2;
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-//            getChildAt(0).setPaddingRelative(side, 0, side, 0);
-//        } else {
-//            getChildAt(0).setPadding(side,0,side,0);
-//        }
+        int side = 30;//getWidth() / 2;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            getChildAt(0).setPaddingRelative(side, 0, side, 0);
+        } else {
+            getChildAt(0).setPadding(side,0,side,0);
+        }
 
     }
 

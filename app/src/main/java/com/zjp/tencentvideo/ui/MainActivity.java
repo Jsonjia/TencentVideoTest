@@ -1,173 +1,111 @@
 package com.zjp.tencentvideo.ui;
 
-import android.annotation.SuppressLint;
-import android.support.v7.app.AppCompatActivity;
+import android.Manifest;
+import android.app.ListActivity;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.os.Bundle;
-import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.Toast;
 
-import com.tencent.rtmp.TXLiveConstants;
-import com.tencent.rtmp.TXLivePushConfig;
-import com.tencent.rtmp.TXLivePusher;
-import com.tencent.rtmp.ui.TXCloudVideoView;
-import com.zjp.tencentvideo.R;
-import com.zjp.tencentvideo.widget.BeautySettingPannel;
 
-public class MainActivity extends AppCompatActivity implements BeautySettingPannel.IOnBeautyParamsChangeListener {
+import java.util.ArrayList;
+import java.util.List;
 
-    private int mVideoQuality = TXLiveConstants.VIDEO_QUALITY_HIGH_DEFINITION;
-    private boolean mAutoBitrate = false;
-    private boolean mAutoResolution = false;
-
-    private TXCloudVideoView mTxCloudVideoView;
-    private TXLivePushConfig mLivePushConfig;
-
-    private Button mBtnFaceBeauty;
-    private BeautySettingPannel mBeautyPannelView;
-    private TXLivePusher mLivePusher;
-    private View mRootView;
-    private int mBeautyLevel = 5;
-    private int mBeautyStyle = TXLiveConstants.BEAUTY_STYLE_SMOOTH;
-    private int mWhiteningLevel = 3;
-    private int mRuddyLevel = 2;
+public class MainActivity extends ListActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        mTxCloudVideoView = findViewById(R.id.txcloutvideo);
-        mBtnFaceBeauty = findViewById(R.id.btnFaceBeauty);
-        mBeautyPannelView = findViewById(R.id.layoutFaceBeauty);
-        mRootView = findViewById(R.id.rootview);
-        mBeautyPannelView.setBeautyParamsChangeListener(this);
+//        setContentView(R.layout.activity_main);
 
-        mBtnFaceBeauty.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mBeautyPannelView.setVisibility(mBeautyPannelView.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+        setListAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, mTitles));
+        checkPermission();
+    }
+
+    private String[] mTitles = new String[]{
+            "推流",
+            "直播"
+    };
+
+    private Class[] mActivities = new Class[]{
+            RTMPActivity.class,
+            RTMPActivity.class,
+    };
+
+    @Override
+    protected void onListItemClick(ListView l, View v, int position, long id) {
+        super.onListItemClick(l, v, position, id);
+        if (position == 0) {
+            startActivity(new Intent(this, mActivities[0]));
+
+        } else if (position == 1) {
+            if (checkPermissionPush()) {
+                startActivity(new Intent(this, mActivities[1]));
+            } else {
+                Toast.makeText(this, "权限不足", Toast.LENGTH_SHORT).show();
             }
-        });
-
-
-        //推流
-        mLivePusher = new TXLivePusher(this);
-        mLivePushConfig = new TXLivePushConfig();
-        mLivePusher.setConfig(mLivePushConfig);
-
-        String rtmpUrl = "rtmp://24649.liveplay.myqcloud.com/live/24649_ef53d4eab4";
-        mLivePusher.startPusher(rtmpUrl); //告诉 SDK 音视频流要推到哪个推流URL上去
-
-        mLivePusher.startCameraPreview(mTxCloudVideoView); //是将界面元素和 Pusher 对象关联起来，从而能够将手机摄像头采集到的画面渲染到屏幕上。
-
-
-        mLivePusher.setVideoQuality(mVideoQuality, mAutoBitrate, mAutoResolution);
-    }
-
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                mBeautyPannelView.setVisibility(View.GONE);
-                break;
-        }
-        return false;
-    }
-
-    @Override
-    public void onBeautyParamsChange(BeautySettingPannel.BeautyParams params, int key) {
-
-        switch (key) {
-            case BeautySettingPannel.BEAUTYPARAM_EXPOSURE:
-                if (mLivePusher != null) {
-                    mLivePusher.setExposureCompensation(params.mExposure);
-                }
-                break;
-            case BeautySettingPannel.BEAUTYPARAM_BEAUTY:
-                mBeautyLevel = params.mBeautyLevel;
-                if (mLivePusher != null) {
-                    mLivePusher.setBeautyFilter(mBeautyStyle, mBeautyLevel, mWhiteningLevel, mRuddyLevel);
-                }
-                break;
-            case BeautySettingPannel.BEAUTYPARAM_WHITE:
-                mWhiteningLevel = params.mWhiteLevel;
-                if (mLivePusher != null) {
-                    mLivePusher.setBeautyFilter(mBeautyStyle, mBeautyLevel, mWhiteningLevel, mRuddyLevel);
-                }
-                break;
-            case BeautySettingPannel.BEAUTYPARAM_BIG_EYE:
-                if (mLivePusher != null) {
-                    mLivePusher.setEyeScaleLevel(params.mBigEyeLevel);
-                }
-                break;
-            case BeautySettingPannel.BEAUTYPARAM_FACE_LIFT:
-                if (mLivePusher != null) {
-                    mLivePusher.setFaceSlimLevel(params.mFaceSlimLevel);
-                }
-                break;
-            case BeautySettingPannel.BEAUTYPARAM_FILTER:
-                if (mLivePusher != null) {
-                    mLivePusher.setFilter(params.mFilterBmp);
-                }
-                break;
-            case BeautySettingPannel.BEAUTYPARAM_GREEN:
-                if (mLivePusher != null) {
-                    mLivePusher.setGreenScreenFile(params.mGreenFile);
-                }
-                break;
-            case BeautySettingPannel.BEAUTYPARAM_MOTION_TMPL:
-                if (mLivePusher != null) {
-                    mLivePusher.setMotionTmpl(params.mMotionTmplPath);
-                }
-                break;
-            case BeautySettingPannel.BEAUTYPARAM_RUDDY:
-                mRuddyLevel = params.mRuddyLevel;
-                if (mLivePusher != null) {
-                    mLivePusher.setBeautyFilter(mBeautyStyle, mBeautyLevel, mWhiteningLevel, mRuddyLevel);
-                }
-                break;
-            case BeautySettingPannel.BEAUTYPARAM_BEAUTY_STYLE:
-                mBeautyStyle = params.mBeautyStyle;
-                if (mLivePusher != null) {
-                    mLivePusher.setBeautyFilter(mBeautyStyle, mBeautyLevel, mWhiteningLevel, mRuddyLevel);
-                }
-                break;
-            case BeautySettingPannel.BEAUTYPARAM_FACEV:
-                if (mLivePusher != null) {
-                    mLivePusher.setFaceVLevel(params.mFaceVLevel);
-                }
-                break;
-            case BeautySettingPannel.BEAUTYPARAM_FACESHORT:
-                if (mLivePusher != null) {
-                    mLivePusher.setFaceShortLevel(params.mFaceShortLevel);
-                }
-                break;
-            case BeautySettingPannel.BEAUTYPARAM_CHINSLIME:
-                if (mLivePusher != null) {
-                    mLivePusher.setChinLevel(params.mChinSlimLevel);
-                }
-                break;
-            case BeautySettingPannel.BEAUTYPARAM_NOSESCALE:
-                if (mLivePusher != null) {
-                    mLivePusher.setNoseSlimLevel(params.mNoseScaleLevel);
-                }
-                break;
-            case BeautySettingPannel.BEAUTYPARAM_FILTER_MIX_LEVEL:
-                if (mLivePusher != null) {
-                    mLivePusher.setSpecialRatio(params.mFilterMixLevel / 10.f);
-                }
-                break;
-//            case BeautySettingPannel.BEAUTYPARAM_CAPTURE_MODE:
-//                if (mLivePusher != null) {
-//                    boolean bEnable = ( 0 == params.mCaptureMode ? false : true);
-//                    mLivePusher.enableHighResolutionCapture(bEnable);
-//                }
-//                break;
-//            case BeautySettingPannel.BEAUTYPARAM_SHARPEN:
-//                if (mLivePusher != null) {
-//                    mLivePusher.setSharpenLevel(params.mSharpenLevel);
-//                }
-//                break;
         }
     }
+
+    private boolean checkPermissionPush() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            List<String> permissions = new ArrayList<>();
+            if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                permissions.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            }
+            if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA)) {
+                permissions.add(Manifest.permission.CAMERA);
+            }
+            if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)) {
+                permissions.add(Manifest.permission.RECORD_AUDIO);
+            }
+            if (permissions.size() != 0) {
+                ActivityCompat.requestPermissions(this,
+                        permissions.toArray(new String[0]),
+                        1);
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private boolean checkPermission() {
+        if (Build.VERSION.SDK_INT >= 26) {
+            List<String> permissions = new ArrayList<>();
+            if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(this, Manifest.permission.SYSTEM_ALERT_WINDOW)) {
+                permissions.add(Manifest.permission.SYSTEM_ALERT_WINDOW);
+            }
+            if (permissions.size() != 0) {
+                ActivityCompat.requestPermissions(this, permissions.toArray(new String[0]), 2);
+                return false;
+            }
+        }
+        return true;
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case 1:
+                for (int ret : grantResults) {
+                    if (ret != PackageManager.PERMISSION_GRANTED) {
+                        return;
+                    }
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+
 }

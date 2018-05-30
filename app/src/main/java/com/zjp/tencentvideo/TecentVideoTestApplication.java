@@ -1,10 +1,9 @@
 package com.zjp.tencentvideo;
 
-import android.app.Application;
 import android.support.multidex.MultiDexApplication;
 
 /**
- * Created by zjp on 2018/5/28 14:26.
+ * Created by zjp on 2018/5/29 17:20.
  */
 
 public class TecentVideoTestApplication extends MultiDexApplication {

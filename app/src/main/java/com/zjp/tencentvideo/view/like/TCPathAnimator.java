@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.wapchief.livertmpandroid.views.like;
+package com.zjp.tencentvideo.view.like;
 
 import android.graphics.Matrix;
 import android.graphics.Path;

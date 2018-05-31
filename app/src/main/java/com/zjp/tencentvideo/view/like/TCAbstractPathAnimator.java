@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.wapchief.livertmpandroid.views.like;
+package com.zjp.tencentvideo.view.like;
 
 import android.content.res.Resources;
 import android.content.res.TypedArray;
@@ -21,7 +21,7 @@ import android.graphics.Path;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.wapchief.livertmpandroid.R;
+import com.zjp.tencentvideo.R;
 
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;

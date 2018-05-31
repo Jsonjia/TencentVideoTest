@@ -8,4 +8,10 @@
     <color name="black">#000000</color>
     <color name="colorGray7">#D8D8D8</color>
     <color name="transparent">#00000000</color>
+    <color name="colorRed">#FF3333</color>
+    <color name="colorTextWhite">#FFFFFF</color>
+    <color name="colorTransparentBlack">#44777777</color>
+    <color name="color_input_dialog_background">#b4ffffff</color>
+    <color name="c9">#777777</color>
+    <color name="c8">#FFFFFF</color>
 </resources>

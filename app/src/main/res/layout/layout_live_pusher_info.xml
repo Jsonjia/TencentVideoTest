@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:ignore="contentDescription"
     android:layout_width="110dp"
     android:layout_height="35dp"
     android:background="@drawable/pusher_info_background"
@@ -9,7 +8,8 @@
     android:paddingBottom="1dp"
     android:paddingLeft="1dp"
     android:paddingRight="1dp"
-    android:paddingTop="1dp">
+    android:paddingTop="1dp"
+    tools:ignore="contentDescription">
 
     <ImageView
         android:id="@+id/iv_head_icon"
@@ -22,24 +22,24 @@
         android:id="@+id/tv_broadcasting_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="10sp"
-        android:singleLine="true"
-        android:maxLines="1"
-        android:textColor="@color/colorTextWhite"
         android:layout_alignParentTop="true"
-        android:paddingTop="2.5dp"
         android:layout_marginLeft="5dp"
+        android:layout_toRightOf="@+id/iv_record_ball"
+        android:maxLines="1"
         android:paddingRight="10dp"
-        android:layout_toRightOf="@+id/iv_record_ball"/>
+        android:paddingTop="2.5dp"
+        android:singleLine="true"
+        android:textColor="@color/colorTextWhite"
+        android:textSize="10sp" />
 
     <ImageView
         android:id="@+id/iv_record_ball"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:layout_toRightOf="@id/iv_head_icon"
-        android:layout_marginTop="6dp"
         android:layout_marginLeft="5dp"
+        android:layout_marginTop="6dp"
+        android:layout_toRightOf="@id/iv_head_icon"
         android:background="@drawable/liveshow_item_dot"
         android:scaleType="fitXY" />
 
@@ -47,24 +47,24 @@
         android:id="@+id/tv_host_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/iv_record_ball"
+        android:layout_toEndOf="@+id/iv_head_icon"
+        android:layout_toRightOf="@+id/iv_head_icon"
         android:textColor="@color/colorTextWhite"
         android:textSize="10sp"
-        android:visibility="visible"
-        android:layout_below="@+id/iv_record_ball"
-        android:layout_toRightOf="@+id/iv_head_icon"
-        android:layout_toEndOf="@+id/iv_head_icon" />
+        android:visibility="visible" />
 
 
     <TextView
         android:id="@+id/tv_member_counts"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/tv_broadcasting_time"
+        android:layout_below="@+id/tv_broadcasting_time"
         android:layout_gravity="center"
         android:drawablePadding="5dp"
-        android:textSize="10sp"
         android:textColor="@color/colorTextWhite"
-        android:layout_below="@+id/tv_broadcasting_time"
-        android:layout_alignLeft="@+id/tv_broadcasting_time" />
+        android:textSize="10sp" />
 
 
 </RelativeLayout>

@@ -94,4 +94,17 @@
             android:textColor="#ffffff"
             android:textSize="18dp" />
     </FrameLayout>
+
+    <TextView
+        android:id="@+id/netbusy_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorRed"
+        android:gravity="center"
+        android:paddingBottom="3dp"
+        android:paddingTop="3dp"
+        android:text="当前网络质量很糟糕，建议您拉近离路由器的距离，避免WiFi穿墙！"
+        android:textColor="#ffffff"
+        android:textSize="10dp"
+        android:visibility="gone" />
 </FrameLayout>

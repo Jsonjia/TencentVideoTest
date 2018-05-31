@@ -35,7 +35,7 @@ public class MainActivity extends ListActivity {
 
     private Class[] mActivities = new Class[]{
             RTMPActivity.class,
-            RTMPActivity.class,
+            LiveActivity.class,
     };
 
     @Override

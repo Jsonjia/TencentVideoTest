@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.wapchief.livertmpandroid.views.like;
+package com.zjp.tencentvideo.view.like;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -25,7 +25,8 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.RelativeLayout;
 
-import com.wapchief.livertmpandroid.R;
+
+import com.zjp.tencentvideo.R;
 
 import java.util.Random;
 

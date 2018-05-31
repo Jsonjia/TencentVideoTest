@@ -1,4 +1,4 @@
-package com.zjp.tencentvideo.beautysettings;
+package com.zjp.tencentvideo.view;
 
 import android.app.Dialog;
 import android.content.Context;

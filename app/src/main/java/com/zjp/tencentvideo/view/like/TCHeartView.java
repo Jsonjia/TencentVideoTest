@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.wapchief.livertmpandroid.views.like;
+package com.zjp.tencentvideo.view.like;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -27,7 +27,8 @@ import android.graphics.drawable.BitmapDrawable;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 
-import com.wapchief.livertmpandroid.R;
+import com.zjp.tencentvideo.R;
+
 
 /**
  * 飘心动画心形界面类

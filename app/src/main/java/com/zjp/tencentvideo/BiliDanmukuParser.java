@@ -1,4 +1,4 @@
-package com.wapchief.livertmpandroid;
+package com.zjp.tencentvideo;
 
 import android.graphics.Color;
 import android.text.TextUtils;
@@ -33,7 +33,7 @@ import static master.flame.danmaku.danmaku.model.IDanmakus.ST_BY_TIME;
  * @date 2018/3/20
  */
 
-public class BiliDanmukuParser  extends BaseDanmakuParser {
+public class BiliDanmukuParser extends BaseDanmakuParser {
 
     static {
         System.setProperty("org.xml.sax.driver", "org.xmlpull.v1.sax2.Driver");

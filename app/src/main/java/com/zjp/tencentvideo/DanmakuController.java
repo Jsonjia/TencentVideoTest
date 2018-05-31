@@ -1,4 +1,4 @@
-package com.wapchief.livertmpandroid;
+package com.zjp.tencentvideo;
 
 import android.content.Context;
 import android.graphics.Canvas;

@@ -2,6 +2,8 @@ package com.zjp.tencentvideo.ui;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -10,6 +12,7 @@ import android.view.MotionEvent;
 import android.view.Surface;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.tencent.rtmp.ITXLivePushListener;
@@ -34,6 +37,7 @@ public class RTMPActivity extends AppCompatActivity implements ITXLivePushListen
     private TXLivePusher mLivePusher;
     private Button mBtnFaceBeauty, mBtnMsgInput, mBtnCameraChange, mBtnClose;
     private View mRootView;
+    private TextView mNetBusyTips;
 
     private int mBeautyLevel = 5;
     private int mBeautyStyle = TXLiveConstants.BEAUTY_STYLE_SMOOTH;
@@ -45,6 +49,9 @@ public class RTMPActivity extends AppCompatActivity implements ITXLivePushListen
     private int mVideoSrc = VIDEO_SRC_CAMERA;
 
     boolean mVideoPublish;
+    private int mNetBusyCount = 0;
+
+    private Handler mMainHandler;
 
     //美颜管理
     BeautyDialogFragment mBeautyDialogFragment;
@@ -64,12 +71,14 @@ public class RTMPActivity extends AppCompatActivity implements ITXLivePushListen
     }
 
     private void initView() {
+        mMainHandler = new Handler(Looper.getMainLooper());
         mTxCloudVideoView = findViewById(R.id.txcloutvideo);
         mBtnFaceBeauty = findViewById(R.id.btnFaceBeauty);
         mRootView = findViewById(R.id.rootview);
         mBtnMsgInput = findViewById(R.id.btn_message_input);
         mBtnCameraChange = findViewById(R.id.btnCameraChange);
         mBtnClose = findViewById(R.id.btn_close);
+        mNetBusyTips =  findViewById(R.id.netbusy_tv);
 
     }
 
@@ -104,7 +113,7 @@ public class RTMPActivity extends AppCompatActivity implements ITXLivePushListen
             mTxCloudVideoView.setVisibility(View.VISIBLE);
         }
 
-        Bitmap bitmap = BitmapUtils.decodeResource(getResources(), R.drawable.langman);
+        Bitmap bitmap = BitmapUtils.decodeResource(getResources(), R.mipmap.pause_publish);
         //水印
         mLivePushConfig.setWatermark(bitmap, 0.02f, 0.05f, 0.2f);
 
@@ -128,7 +137,7 @@ public class RTMPActivity extends AppCompatActivity implements ITXLivePushListen
             mLivePusher.startScreenCapture();
         }
 
-        String rtmpUrl = "rtmp://24649.livepush.myqcloud.com/live/24649_f6f228af70?bizid=24649&txSecret=6cf88af8599cf6b756261f2ce6ee1d7e&txTime=5B0D78FF";
+        String rtmpUrl = "rtmp://24649.livepush.myqcloud.com/live/24649_3d1edcf8e8?bizid=24649&txSecret=f8df6b8254699d235a150c6cd654bfa2&txTime=5B101BFF";
         mLivePusher.startPusher(rtmpUrl); //告诉 SDK 音视频流要推到哪个推流URL上去
         return true;
     }
@@ -150,9 +159,9 @@ public class RTMPActivity extends AppCompatActivity implements ITXLivePushListen
             }
         }
 
-        if (event == TXLiveConstants.PUSH_ERR_NET_DISCONNECT) {
+        if (event == TXLiveConstants.PUSH_ERR_NET_DISCONNECT) { //网络断连,且经三次抢救无效,可以放弃治疗,更多重试请自行重启推流
             stopPublishRtmp();
-        } else if (event == TXLiveConstants.PUSH_WARNING_HW_ACCELERATION_FAIL) {
+        } else if (event == TXLiveConstants.PUSH_WARNING_HW_ACCELERATION_FAIL) { //硬编码启动失败，采用软编码
             Toast.makeText(getApplicationContext(), bundle.getString(TXLiveConstants.EVT_DESCRIPTION), Toast.LENGTH_SHORT).show();
             mLivePushConfig.setHardwareAcceleration(TXLiveConstants.ENCODE_VIDEO_SOFTWARE);
 //            mBtnHWEncode.setBackgroundResource(R.drawable.quick2);
@@ -162,14 +171,14 @@ public class RTMPActivity extends AppCompatActivity implements ITXLivePushListen
             stopPublishRtmp();
         } else if (event == TXLiveConstants.PUSH_ERR_SCREEN_CAPTURE_START_FAILED) {
             stopPublishRtmp();
-        } else if (event == TXLiveConstants.PUSH_EVT_CHANGE_RESOLUTION) {
+        } else if (event == TXLiveConstants.PUSH_EVT_CHANGE_RESOLUTION) { //推流动态调整分辨率
             Log.d("zjp", "change resolution to " + bundle.getInt(TXLiveConstants.EVT_PARAM2) + ", bitrate to" + bundle.getInt(TXLiveConstants.EVT_PARAM1));
-        } else if (event == TXLiveConstants.PUSH_EVT_CHANGE_BITRATE) {
+        } else if (event == TXLiveConstants.PUSH_EVT_CHANGE_BITRATE) { //推流动态调整码率
             Log.d("zjp", "change bitrate to" + bundle.getInt(TXLiveConstants.EVT_PARAM1));
-        } else if (event == TXLiveConstants.PUSH_WARNING_NET_BUSY) {
-//            ++mNetBusyCount;
-//            Log.d(TAG, "net busy. count=" + mNetBusyCount);
-//            showNetBusyTips();
+        } else if (event == TXLiveConstants.PUSH_WARNING_NET_BUSY) { //当前网络已经非常糟糕
+            ++mNetBusyCount;
+            Log.d("zjp", "net busy. count=" + mNetBusyCount);
+            showNetBusyTips();
         } else if (event == TXLiveConstants.PUSH_EVT_START_VIDEO_ENCODER) {
             int encType = bundle.getInt(TXLiveConstants.EVT_PARAM1);
 //            mHWVideoEncode = (encType == 1);
@@ -245,6 +254,19 @@ public class RTMPActivity extends AppCompatActivity implements ITXLivePushListen
                 mLivePusher.startScreenCapture();
             }
         }
+    }
+
+    private void showNetBusyTips() {
+        if (mNetBusyTips.isShown()) {
+            return;
+        }
+        mNetBusyTips.setVisibility(View.VISIBLE);
+        mMainHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mNetBusyTips.setVisibility(View.GONE);
+            }
+        }, 5000);
     }
 
     /**
@@ -332,7 +354,6 @@ public class RTMPActivity extends AppCompatActivity implements ITXLivePushListen
             case R.id.btnFaceBeauty:
                 //美颜
                 if (mBeautyDialogFragment.isAdded()) {
-
                     mBeautyDialogFragment.dismiss();
                 } else {
                     mBeautyDialogFragment.show(getSupportFragmentManager(), "");
@@ -345,7 +366,47 @@ public class RTMPActivity extends AppCompatActivity implements ITXLivePushListen
                 break;
 
             case R.id.btn_close:
+
+                //关闭推流
+                stopPublishRtmp();
+                finish();
                 break;
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (mTxCloudVideoView != null) {
+            mTxCloudVideoView.onResume();
+        }
+
+        if (mVideoPublish && mLivePusher != null && mVideoSrc == VIDEO_SRC_CAMERA) {
+            mLivePusher.resumePusher();
+            mLivePusher.resumeBGM();
+        }
+    }
+
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (mTxCloudVideoView != null) {
+            mTxCloudVideoView.onPause();
+        }
+
+        if (mVideoPublish && mLivePusher != null && mVideoSrc == VIDEO_SRC_CAMERA) {
+            mLivePusher.pausePusher();
+            mLivePusher.pauseBGM();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        stopPublishRtmp();
+        if (mTxCloudVideoView != null) {
+            mTxCloudVideoView.onDestroy();
         }
     }
 }

@@ -17,6 +17,14 @@
         android:layout_height="wrap_content"
         android:visibility="gone" />
 
+    <com.opensource.svgaplayer.SVGAImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitCenter"
+        android:visibility="gone"
+        app:antiAlias="true" />
+
     <android.support.v7.widget.SwitchCompat
         android:id="@+id/switch_bt"
         android:layout_width="wrap_content"
@@ -144,12 +152,12 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1">
 
-                    <ImageView
-                        android:id="@+id/btn_log"
+                    <TextView
+                        android:id="@+id/tv_animation"
                         android:layout_width="@dimen/live_btn_size"
                         android:layout_height="@dimen/live_btn_size"
-                        android:layout_gravity="center"
-                        android:background="@drawable/icon_log_off" />
+                        android:gravity="center"
+                        android:text="动画" />
                 </FrameLayout>
 
                 <FrameLayout

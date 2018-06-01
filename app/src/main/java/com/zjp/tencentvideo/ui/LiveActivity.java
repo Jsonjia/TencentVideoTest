@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SwitchCompat;
+import android.text.TextUtils;
 import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
@@ -15,7 +16,13 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.opensource.svgaplayer.SVGADrawable;
+import com.opensource.svgaplayer.SVGAImageView;
+import com.opensource.svgaplayer.SVGAParser;
+import com.opensource.svgaplayer.SVGAVideoEntity;
 import com.tencent.rtmp.TXLiveConstants;
 import com.tencent.rtmp.TXLivePlayer;
 import com.tencent.rtmp.ui.TXCloudVideoView;
@@ -24,6 +31,9 @@ import com.zjp.tencentvideo.R;
 import com.zjp.tencentvideo.utils.TCFrequeControl;
 import com.zjp.tencentvideo.view.TCInputTextMsgDialog;
 import com.zjp.tencentvideo.view.like.TCHeartLayout;
+
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import master.flame.danmaku.ui.widget.DanmakuView;
 
@@ -37,13 +47,15 @@ public class LiveActivity extends AppCompatActivity implements TCInputTextMsgDia
     private DanmakuView danmakuView;
     private SwitchCompat mSwitchBt;
     private RecyclerView mRv_user_avatar;
-    private ImageView mBtn_message_input, mbtn_log, mbtn_record, mbtn_like, mclose_record, mrecord, mretry_record, mPlayBtn, mbtn_linkmic, mBtnRenderRotation;
+    private ImageView mBtn_message_input, mbtn_record, mbtn_like, mclose_record, mrecord, mretry_record, mPlayBtn, mbtn_linkmic, mBtnRenderRotation;
     private Button mbtn_back;
     private ListView mim_msg_listview;
     private ProgressBar mrecord_progress;
     private TCHeartLayout mheart_layout;
     private DanmakuView mDanmakuView;
     private TCHeartLayout mHeartLayout;
+    private TextView mtv_animation;
+    private SVGAImageView mimageView;
 
     private TCFrequeControl mLikeFrequeControl;
 
@@ -51,6 +63,7 @@ public class LiveActivity extends AppCompatActivity implements TCInputTextMsgDia
     private int mCurrentRenderRotation;
 
     private boolean flag;
+    private boolean isStopAnimation;
 
     /**
      * inputDialog
@@ -84,7 +97,7 @@ public class LiveActivity extends AppCompatActivity implements TCInputTextMsgDia
         mSwitchBt = findViewById(R.id.switch_bt);
         mRv_user_avatar = findViewById(R.id.rv_user_avatar);
         mBtn_message_input = findViewById(R.id.btn_message_input);
-        mbtn_log = findViewById(R.id.btn_log);
+        mtv_animation = findViewById(R.id.tv_animation);
         mbtn_record = findViewById(R.id.btn_record);
         mbtn_like = findViewById(R.id.btn_like);
         mbtn_back = findViewById(R.id.btn_back);
@@ -99,11 +112,11 @@ public class LiveActivity extends AppCompatActivity implements TCInputTextMsgDia
         mbtn_linkmic = findViewById(R.id.btn_linkmic);
         mHeartLayout = findViewById(R.id.heart_layout);
         mBtnRenderRotation = findViewById(R.id.btnOrientation);
+        mimageView = findViewById(R.id.imageView);
     }
 
     private void initData() {
 
-        mbtn_log.setVisibility(View.GONE);
         mbtn_record.setVisibility(View.GONE);
 
 
@@ -118,6 +131,7 @@ public class LiveActivity extends AppCompatActivity implements TCInputTextMsgDia
         mbtn_linkmic.setOnClickListener(this);
         mbtn_like.setOnClickListener(this);
         mBtnRenderRotation.setOnClickListener(this);
+        mtv_animation.setOnClickListener(this);
     }
 
     /**
@@ -131,7 +145,7 @@ public class LiveActivity extends AppCompatActivity implements TCInputTextMsgDia
 
         mTxCloudVideoView.setVisibility(View.VISIBLE);
 
-        String url = "rtmp://24649.liveplay.myqcloud.com/live/24649_3d1edcf8e8";
+        String url = "rtmp://24649.liveplay.myqcloud.com/live/24649_616dc269b2";
         mLivePlayer.startPlay(url, TXLivePlayer.PLAY_TYPE_LIVE_RTMP);
     }
 
@@ -241,6 +255,34 @@ public class LiveActivity extends AppCompatActivity implements TCInputTextMsgDia
 
                 mLivePlayer.setRenderRotation(mCurrentRenderRotation);
 
+                break;
+
+            case R.id.tv_animation:
+                isStopAnimation = !isStopAnimation;
+                if (isStopAnimation) {
+                    mimageView.setVisibility(View.VISIBLE);
+                    SVGAParser parser = new SVGAParser(this);
+                    try {
+                        parser.parse(new URL("https://github.com/yyued/SVGA-Samples/blob/master/kingset.svga?raw=true"), new SVGAParser.ParseCompletion() {
+                            @Override
+                            public void onComplete(SVGAVideoEntity mSVGAVideoEntity) {
+                                SVGADrawable drawable = new SVGADrawable(mSVGAVideoEntity);
+                                mimageView.setImageDrawable(drawable);
+                                mimageView.startAnimation();
+                            }
+
+                            @Override
+                            public void onError() {
+                                Toast.makeText(LiveActivity.this, "parse error!", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    } catch (Exception e) {
+                        System.out.print(true);
+                    }
+                } else {
+                    mimageView.stopAnimation();
+                    mimageView.setVisibility(View.GONE);
+                }
                 break;
         }
     }

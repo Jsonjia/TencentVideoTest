@@ -137,7 +137,7 @@ public class RTMPActivity extends AppCompatActivity implements ITXLivePushListen
             mLivePusher.startScreenCapture();
         }
 
-        String rtmpUrl = "rtmp://24649.livepush.myqcloud.com/live/24649_3d1edcf8e8?bizid=24649&txSecret=f8df6b8254699d235a150c6cd654bfa2&txTime=5B101BFF";
+        String rtmpUrl = "rtmp://24649.livepush.myqcloud.com/live/24649_616dc269b2?bizid=24649&txSecret=73e9beb0abb7ad8f749a0dc08af765d3&txTime=5B116D7F";
         mLivePusher.startPusher(rtmpUrl); //告诉 SDK 音视频流要推到哪个推流URL上去
         return true;
     }

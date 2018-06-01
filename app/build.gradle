@@ -41,4 +41,5 @@ dependencies {
 
     implementation 'com.android.support:design:27.1.1'
     implementation 'com.github.ctiao:DanmakuFlameMaster:0.9.25'
+    implementation 'com.github.yyued:SVGAPlayer-Android:2.0.3'
 }

@@ -83,8 +83,13 @@ public class RTMPActivity extends AppCompatActivity implements ITXLivePushListen
     }
 
     private void initData() {
+
+        mTxCloudVideoView.setLogMargin(12, 12, 110, 60);
+        mTxCloudVideoView.showLog(false);
+
         //推流
         mLivePusher = new TXLivePusher(this);
+
         mLivePushConfig = new TXLivePushConfig();
         mLivePusher.setConfig(mLivePushConfig);
 
@@ -122,6 +127,7 @@ public class RTMPActivity extends AppCompatActivity implements ITXLivePushListen
 //        if (isActivityCanRotation()) {
 //            onActivityRotation();
 //        }
+
         mLivePushConfig.setCustomModeType(customModeType);
         mLivePusher.setPushListener(this);
         mLivePushConfig.setPauseImg(300, 5);
@@ -137,7 +143,7 @@ public class RTMPActivity extends AppCompatActivity implements ITXLivePushListen
             mLivePusher.startScreenCapture();
         }
 
-        String rtmpUrl = "rtmp://24649.livepush.myqcloud.com/live/24649_616dc269b2?bizid=24649&txSecret=73e9beb0abb7ad8f749a0dc08af765d3&txTime=5B116D7F";
+        String rtmpUrl = "rtmp://24649.livepush.myqcloud.com/live/24649_743e7a0df4?bizid=24649&txSecret=980911a90e1d3dbcde9ee86746bc0ee6&txTime=5B1561FF";
         mLivePusher.startPusher(rtmpUrl); //告诉 SDK 音视频流要推到哪个推流URL上去
         return true;
     }

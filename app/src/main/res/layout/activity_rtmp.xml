@@ -47,6 +47,14 @@
                 android:background="@drawable/camera_change" />
 
             <Button
+                android:id="@+id/rtmproom_linkmic_btn"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="20dp"
+                android:background="@drawable/linkmic_start" />
+
+            <Button
                 android:id="@+id/btn_close"
                 android:layout_width="30dp"
                 android:layout_height="30dp"

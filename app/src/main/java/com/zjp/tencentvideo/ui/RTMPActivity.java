@@ -40,7 +40,6 @@ public class RTMPActivity extends AppCompatActivity implements ITXLivePushListen
 
 //    private l
 
-    private int mRuddyLevel = 2;
 
     private static final int VIDEO_SRC_CAMERA = 0;
     private static final int VIDEO_SRC_SCREEN = 1;

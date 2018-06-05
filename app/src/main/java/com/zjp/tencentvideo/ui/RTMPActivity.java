@@ -1,7 +1,5 @@
 package com.zjp.tencentvideo.ui;
 
-import android.app.Activity;
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
@@ -10,7 +8,6 @@ import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.Surface;
 import android.view.View;
 import android.widget.Button;
@@ -24,8 +21,6 @@ import com.tencent.rtmp.TXLivePusher;
 import com.tencent.rtmp.ui.TXCloudVideoView;
 import com.zjp.tencentvideo.R;
 import com.zjp.tencentvideo.beautysettings.BeautyDialogFragment;
-import com.zjp.tencentvideo.listener.LiveRoom;
-import com.zjp.tencentvideo.listener.LiveRoomActivityInterface;
 import com.zjp.tencentvideo.utils.BitmapUtils;
 import com.zjp.tencentvideo.utils.TCUtils;
 
@@ -58,7 +53,6 @@ public class RTMPActivity extends AppCompatActivity implements ITXLivePushListen
     private int mNetBusyCount = 0;
 
     private Handler mMainHandler;
-    private LiveRoomActivityInterface mActivityInterface;
 
     //美颜管理
     BeautyDialogFragment mBeautyDialogFragment;
@@ -73,9 +67,6 @@ public class RTMPActivity extends AppCompatActivity implements ITXLivePushListen
 //        String version = TXLiveBase.getSDKVersionStr();
 //        Log.d("zjp", "version=" + version);
 
-        mActivityInterface = ((LiveRoomActivityInterface) RTMPActivity.this);
-
-        Log.d("zjp", "  mActivityInterface=" + mActivityInterface);
         initView();
         initData();
         initListener();
@@ -134,6 +125,7 @@ public class RTMPActivity extends AppCompatActivity implements ITXLivePushListen
         Bitmap bitmap = BitmapUtils.decodeResource(getResources(), R.mipmap.pause_publish);
         //水印
         mLivePushConfig.setWatermark(bitmap, 0.02f, 0.05f, 0.2f);
+        //参数分别是水印图片的 Bitmap、水印位置的 X 轴坐标，水印位置的 Y 轴坐标，水印宽度。后面三个参数取值范围是[0, 1]，后面两个参数分别是水印位置的X轴坐标和 Y 轴坐标
 
         int customModeType = 0;
 
@@ -401,28 +393,7 @@ public class RTMPActivity extends AppCompatActivity implements ITXLivePushListen
         mBtnLinkMic.setEnabled(false);
         Toast.makeText(RTMPActivity.this, "等待主播接受......", 2).show();
 
-        mActivityInterface.getLiveRoom().requestJoinPusher(10, new LiveRoom.RequestJoinPusherCallback() {
-            @Override
-            public void onAccept() {
-                Toast.makeText(RTMPActivity.this, "主播接受了您的连麦请求，开始连麦", Toast.LENGTH_SHORT).show();
-            }
 
-            @Override
-            public void onReject(String reason) {
-                Toast.makeText(RTMPActivity.this, reason, Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onTimeOut() {
-                mBtnLinkMic.setEnabled(true);
-                Toast.makeText(RTMPActivity.this, "连麦请求超时，主播没有做出回应", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onError(int code, String errInfo) {
-                mBtnLinkMic.setEnabled(true);
-            }
-        });
     }
 
     @Override

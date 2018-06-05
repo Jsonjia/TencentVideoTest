@@ -38,13 +38,6 @@ public class RTMPActivity extends AppCompatActivity implements ITXLivePushListen
     private View mRootView;
     private TextView mNetBusyTips;
 
-//    private l
-
-    private int mBeautyLevel = 5;
-    private int mBeautyStyle = TXLiveConstants.BEAUTY_STYLE_SMOOTH;
-    private int mWhiteningLevel = 3;
-    private int mRuddyLevel = 2;
-
     private static final int VIDEO_SRC_CAMERA = 0;
     private static final int VIDEO_SRC_SCREEN = 1;
     private int mVideoSrc = VIDEO_SRC_CAMERA;
